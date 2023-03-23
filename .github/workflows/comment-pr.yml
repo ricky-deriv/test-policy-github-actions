@@ -1,14 +1,12 @@
 name: My Workflow
 on:
-  push:
-    branches: 
-      - main
+  pull_request:
+    types: [opened, reopened]
 jobs:
   build: 
     runs-on: ubuntu-latest
     steps:
-    - name: comment pr
-      uses: actions/github-script@v6
+    - uses: actions/github-script@v6
       if: always()
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
