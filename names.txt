@@ -4,3 +4,5 @@
 4. losh
 5. uosh
 6. yosh
+7. wosh
+8. mosh
