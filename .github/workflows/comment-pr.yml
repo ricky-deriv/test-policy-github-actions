@@ -7,10 +7,15 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: some-bash-commands
+      - name: pull conftest container image
+        run: |
+          docker pull openpolicyagent/conftest:latest 
+      - name: run bash and conftest
         run: |
           echo "printing some lines, going to print directory..."
-          ls
+          ls aws
+          echo $PWD
+          docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/
       - uses: actions/github-script@v6
         with:
           script: |
