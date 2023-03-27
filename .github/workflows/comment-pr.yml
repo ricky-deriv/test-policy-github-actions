@@ -17,6 +17,7 @@ jobs:
       - name: print conftest output
         if: always()
         run: |
+          echo 'outcome - ${{ steps.conftest.outcome }}'
           echo 'out- ${{ steps.conftest.outputs.stdout }}'
           echo 'err- ${{ steps.conftest.outputs.stderr }}'
       - uses: actions/github-script@v6
