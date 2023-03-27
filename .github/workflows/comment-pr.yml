@@ -10,15 +10,14 @@ jobs:
       - name: pull conftest container image
         run: |
           docker pull openpolicyagent/conftest:latest 
-      - name: run bash and conftest
+      - name: run conftest
+        id: conftest
         run: |
-          echo "printing some lines, going to print directory..."
-          ls aws
-          echo $PWD
           docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/
       - uses: actions/github-script@v6
         with:
           script: |
+            print(\`${{ steps.conftest.outputs.stderr }}\`)
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
