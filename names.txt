@@ -5,3 +5,4 @@
 5. kosh
 6. mosh
 7. uhuj
+8. poloks
