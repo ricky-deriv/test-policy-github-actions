@@ -14,6 +14,7 @@ jobs:
         id: conftest
         run: |
           docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ -O result.txt
+          cat result.txt
       - uses: actions/github-script@v6
         if: always()
         with:
