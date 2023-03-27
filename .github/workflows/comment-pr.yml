@@ -6,6 +6,10 @@ jobs:
   comment: 
     runs-on: ubuntu-latest
     steps:
+      - name: some-bash-commands
+        run: |
+          echo "printing some lines, going to print directory..."
+          ls
       - uses: actions/github-script@v6
         with:
           script: |
