@@ -17,7 +17,10 @@ jobs:
           echo "testing=$test" >> $GITHUB_OUTPUT 
           docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
       - name: get conftest result file content
-        run: echo "conftest_result=$(cat conftest-result.txt)" >> $GITHUB_OUTPUT
+        if: always()
+        run: |
+          RESULT=$(cat conftest=result.txt)
+          echo "conftest_result=$RESULT" >> $GITHUB_OUTPUT
       - name: print conftest output
         if: always()
         run: |
