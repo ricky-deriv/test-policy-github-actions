@@ -18,7 +18,6 @@ jobs:
       - name: print conftest output
         if: always()
         run: |
-          cat conftest-result.txt
           echo 'outcome - ${{ steps.conftest.outcome }}'
           echo 'out- ${{ steps.conftest.stdout }}'
           echo 'err- ${{ steps.conftest.stderr }}'
