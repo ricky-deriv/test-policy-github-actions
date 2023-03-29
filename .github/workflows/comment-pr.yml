@@ -14,6 +14,7 @@ jobs:
         id: conftest
         run: |
           docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
+          echo "hello ?"
       - name: print conftest output
         if: always()
         run: |
