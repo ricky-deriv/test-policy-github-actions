@@ -20,7 +20,7 @@ jobs:
         if: always()
         run: |
           ls
-          ls /project
+          cat conftest-result.txt
           echo 'outcome - ${{ steps.conftest.outcome }}'
           echo 'outputs - ${{ steps.conftest.outputs }}'
           echo 'out- ${{ steps.conftest.outputs.stdout }}'
