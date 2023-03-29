@@ -23,7 +23,7 @@ jobs:
           echo "$RESULT"
           TEST=$(cat conftest-result.txt)
           echo "$TEST"
-          echo "conftest_result=$RESULT" >> $GITHUB_OUTPUT
+          echo "conftest_result=\"$RESULT\"" >> $GITHUB_OUTPUT
       - name: print conftest output
         if: always()
         run: |
