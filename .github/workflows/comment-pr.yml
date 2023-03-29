@@ -16,6 +16,8 @@ jobs:
           test='hello'
           echo "testing=$test" >> $GITHUB_OUTPUT 
           docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
+      - name: get conftest result file content
+        run: echo "conftest_result=$(cat conftest-result.txt)" >> $GITHUB_OUTPUT
       - name: print conftest output
         if: always()
         run: |
@@ -25,12 +27,12 @@ jobs:
           echo 'outputs - ${{ steps.conftest.outputs }}'
           echo 'out- ${{ steps.conftest.outputs.stdout }}'
           echo 'err- ${{ steps.conftest.outputs.stderr }}'
-          echo 'test - ${{ steps.conftest.outputs.testing }}'
+          echo 'file - ${{ steps.conftest.outputs.conftest_result }}'
       - uses: actions/github-script@v6
         if: always()
         with:
           script: |
-            const output = `output: ${{ steps.conftest.outputs.stdout }} and ${{ steps.conftest.outputs.stderr }}`
+            const output = "$(cat conftest-result.txt)"
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
