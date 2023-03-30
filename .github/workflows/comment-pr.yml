@@ -26,6 +26,7 @@ jobs:
         if: always()
         with:
           script: |
+            const colorRegex = /\u001b\[\d{1,2}m/g;
             const output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
             <details><summary>policy check output</summary>
             
@@ -35,6 +36,8 @@ jobs:
             </details>
             
             end`
+            
+            output = output.replace(colorRegex, "")
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
