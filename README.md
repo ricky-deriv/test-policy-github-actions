@@ -1,4 +1,4 @@
-# OPA policy on terraform plan (json)
+# Simple OPA policy on terraform plan (json)
 
 ## Aim
 - to test Open Policy Agent (OPA) policies on JSON output of a terraform plan in a Github Action
