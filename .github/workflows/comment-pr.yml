@@ -11,6 +11,7 @@ jobs:
         run: |
           docker pull openpolicyagent/conftest:latest 
       - name: run conftest
+        id: conftest
         run: |
          docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
       - name: print result into github output
@@ -25,7 +26,15 @@ jobs:
         if: always()
         with:
           script: |
-            const output = `${{ steps.conftest-result.outputs.result }}`
+            const output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
+            <details><summary>policy check output</summary>
+            
+            \`\`\`\n
+            ${{ steps.conftest-result.outputs.result }}
+            \`\`\`
+            </details>
+            
+            end`
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
