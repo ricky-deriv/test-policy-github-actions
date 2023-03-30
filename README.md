@@ -3,18 +3,23 @@
 ## Aim
 - to test Open Policy Agent (OPA) policies on JSON output of a terraform plan in a Github Action
 
+## Policies
+- a policy on instances' tags is created in `policies/tag-policy.rego`.
+  - checks if instances created have the required tags.
+  - checks if the values added to a certain tag is contained in the allowed list of values.
+
 ## Why 
 ### OPA
 - OPA is not tied to an entity such as Sentinel by Hashicorp.
 - It has simple policy evaluation rules namely:
   - deny (returns error, denies operation)
   - warn (returns warning, passable operation)
-- it has ability to add exceptions if needed
+- it has ability to add exceptions if needed.
 
 ### Conftest
-Conftest is a utility tool used with OPA to evaluate policies
+Conftest is a utility tool used with OPA to evaluate policies.
 - to enable evaluation of policy files contained in a directory.
-- to have the ability to produce different form of outputs (json, table, etc)
+- to have the ability to produce different form of outputs (json, table, etc).
 
 ## How
 for this example, a terraform plan in JSON has been provided in `\aws\tfplan.json` for a direct evaluation of the policy to skip running terraform operations.
