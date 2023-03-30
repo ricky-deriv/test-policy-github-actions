@@ -12,17 +12,18 @@ jobs:
           docker pull openpolicyagent/conftest:latest 
       - name: run conftest
         id: conftest
-        run: |
-          echo "hello ?" && echo "this aerrpr" >&2
+#         run: |
+#           echo "hello ?" && echo "this aerrpr" >&2
+        run: echo "hello world"
 #          docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
       - name: print conftest output
         if: always()
         run: |
-          echo 'outcome - ${{ steps.conftest.outcome }}'
-          echo 'out- ${{ steps.conftest.stdout }}'
-          echo 'err- ${{ steps.conftest.stderr }}'
-          echo 'out2- ${{ steps.conftest.outputs.stdout }}'
-          echo 'err2- ${{ steps.conftest.outputs.stderr }}'
+          echo "outcome - ${{ steps.conftest.outcome }}"
+          echo "out- ${{ steps.conftest.stdout }}"
+          echo "err- ${{ steps.conftest.stderr }}"
+          echo "out2- ${{ steps.conftest.outputs.stdout }}"
+          echo "err2- ${{ steps.conftest.outputs.stderr }}"
           echo 'end'
       - uses: actions/github-script@v6
 #         if: always()
