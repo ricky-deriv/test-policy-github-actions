@@ -25,7 +25,7 @@ jobs:
         if: always()
         with:
           script: |
-            const output = "${{ steps.conftest-result.outputs.result }}"
+            const output = `${{ steps.conftest-result.outputs.result }}`
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
