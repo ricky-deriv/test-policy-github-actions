@@ -27,7 +27,7 @@ jobs:
         with:
           script: |
             const colorRegex = /\u001b\[\d{1,2}m/g;
-            const output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
+            let output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`\n
