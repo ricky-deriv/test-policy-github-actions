@@ -30,8 +30,8 @@ jobs:
         with:
           script: |
             const colorRegex = /\u001b\[\d{1,2}m/g;
-            let output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
-            ## Output: ${{ matrix.output-types }}
+            let output = `### Output: ${{ matrix.output-types }}
+            ### open policy agent check: \`${{ steps.conftest.outcome }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`\n
