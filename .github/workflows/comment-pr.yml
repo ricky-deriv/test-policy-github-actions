@@ -4,6 +4,9 @@ on:
     types: [opened, synchronize]
 jobs:
   comment: 
+    strategy:
+      matrix:
+        output-types: [stdout, tap, table, github]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,21 +16,22 @@ jobs:
       - name: run conftest
         id: conftest
         run: |
-         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
+         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/tfplan.json -p policies/ -o ${{ matrix.output-types }} > conftest-${{ matrix.output-types }}-result.txt
       - name: print result into github output
         if: always()
         id: conftest-result
         run: |
           delimiter="$(openssl rand -hex 8)"
           echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
+          echo "$(cat conftest-${{ matrix.output-types }}-result.txt)" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
         if: always()
         with:
           script: |
             const colorRegex = /\u001b\[\d{1,2}m/g;
-            let output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
+            let output = `### Output: ${{ matrix.output-types }}
+            ### open policy agent check: \`${{ steps.conftest.outcome }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`\n
