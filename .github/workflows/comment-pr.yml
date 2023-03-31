@@ -22,7 +22,7 @@ jobs:
         id: conftest-result
         run: |
           delimiter="$(openssl rand -hex 8)"
-          echo "result-${{ matrix.output-types }}<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
           echo "$(cat conftest-${{ matrix.output-types }}-result.txt)" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
@@ -34,7 +34,7 @@ jobs:
             <details><summary>policy check output</summary>
             
             \`\`\`\n
-            ${{ steps.conftest-result.outputs.result-${{ matrix.output-types }} }}
+            ${{ steps.conftest-result.outputs.result }}
             \`\`\`
             </details>
             
