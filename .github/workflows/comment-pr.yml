@@ -4,6 +4,9 @@ on:
     types: [opened, synchronize]
 jobs:
   comment: 
+    strategy:
+      matrix:
+        output-types: [stdout, json, tap, table, github]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -13,14 +16,14 @@ jobs:
       - name: run conftest
         id: conftest
         run: |
-         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
+         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ -o ${{ matrix.output-types }} > conftest-${{ matrix.output-types }}-result.txt
       - name: print result into github output
         if: always()
         id: conftest-result
         run: |
           delimiter="$(openssl rand -hex 8)"
-          echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
+          echo "result-${{ matrix.output-types }}<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          echo "$(cat conftest-${{ matrix.output-types }}-result.txt)" >> "${GITHUB_OUTPUT}"
           echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
         if: always()
@@ -31,7 +34,7 @@ jobs:
             <details><summary>policy check output</summary>
             
             \`\`\`\n
-            ${{ steps.conftest-result.outputs.result }}
+            ${{ steps.conftest-result.outputs.result-${{ matrix.output-types }} }}
             \`\`\`
             </details>
             
