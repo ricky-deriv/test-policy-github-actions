@@ -16,7 +16,7 @@ jobs:
       - name: run conftest
         id: conftest
         run: |
-         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/tfplan.json -p policies/ aws/ -o ${{ matrix.output-types }} > conftest-${{ matrix.output-types }}-result.txt
+         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/tfplan.json -p policies/ -o ${{ matrix.output-types }} > conftest-${{ matrix.output-types }}-result.txt
       - name: print result into github output
         if: always()
         id: conftest-result
