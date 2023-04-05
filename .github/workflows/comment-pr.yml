@@ -13,7 +13,7 @@ jobs:
       - name: run conftest
         id: conftest
         run: |
-         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ aws/ > conftest-result.txt
+         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ > conftest-result.txt
       - name: print result into github output
         if: always()
         id: conftest-result
