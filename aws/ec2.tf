@@ -31,7 +31,7 @@ resource "aws_instance" "api-canary02" {
 
 resource "aws_instance" "rpc-canary01" {
   ami           = "ami-005f9685cb30f234b"
-  instance_type = "t2.micro"
+  instance_type = "t5.large"
 
   tags = {
     Name    = "rpc-canary01"
