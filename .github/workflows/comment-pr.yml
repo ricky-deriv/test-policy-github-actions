@@ -7,13 +7,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: pull conftest container image
-        run: |
-          docker pull openpolicyagent/conftest:latest 
-      - name: run conftest
+      - name: Setup OPA
+        uses: open-policy-agent/setup-opa@v2
+        with:
+          version: latest
+      - name: run opa
         id: conftest
         run: |
-         docker run --rm -v $PWD:/project -w /project openpolicyagent/conftest:latest test aws/ -p policies/ > conftest-result.txt
+          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" > conftest-result.txt
       - name: print result into github output
         if: always()
         id: conftest-result
