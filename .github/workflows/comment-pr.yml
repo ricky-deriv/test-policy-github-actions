@@ -15,6 +15,7 @@ jobs:
         id: conftest
         run: |
           opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=pretty > conftest-result.txt
+          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=pretty
       - name: print result into github output
         if: always()
         id: conftest-result
