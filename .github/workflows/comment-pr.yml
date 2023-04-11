@@ -40,7 +40,7 @@ jobs:
             
             end`
             
-            # output = output.replace(colorRegex, "")
+            output = output.replace('"', '\"')
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
