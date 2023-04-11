@@ -29,14 +29,11 @@ jobs:
         if: always()
         with:
           script: |
-            const colorRegex = /\u001b\[\d{1,2}m/g;
-            let color = { "deny": "+ ", "warn": "!" };
-            let raw = ${{ steps.opa-result.outputs.result }};
             let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
-            \`\`\`diff\n
-            ${raw.deny.map(x => `${color.deny} ${x}`).join("")}
+            \`\`\`\n
+            ${{ steps.opa-result.outputs.result }}
             \`\`\`
             </details>
             
