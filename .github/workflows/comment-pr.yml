@@ -14,21 +14,23 @@ jobs:
       - name: run opa
         id: conftest
         run: |
-          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=pretty > conftest-result.txt
-          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=pretty
+          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=json 
+#          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=json > conftest-result.txt
       - name: print result into github output
         if: always()
         id: conftest-result
         run: |
-          delimiter="$(openssl rand -hex 8)"
-          echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
-          echo "${delimiter}" >> "${GITHUB_OUTPUT}"
+          echo "out: ${{ steps.conftest.outputs.stdout }}"
+          echo "err: ${{ steps.conftest.outputs.stderr }}"
+          # delimiter="$(openssl rand -hex 8)"
+          # echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
+          # echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
+          # echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
-        if: always()
+#         if: always()
         with:
           script: |
-            const colorRegex = /\u001b\[\d{1,2}m/g;
+            # const colorRegex = /\u001b\[\d{1,2}m/g;
             let output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
             <details><summary>policy check output</summary>
             
