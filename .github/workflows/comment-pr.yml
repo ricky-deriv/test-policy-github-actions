@@ -21,28 +21,26 @@ jobs:
         run: |
           output="$(cat opa-result.json)"
           echo "result=$output" >> "${GITHUB_OUTPUT}"
-          echo "out $output"
-          echo "gitout $result"
           # delimiter="$(openssl rand -hex 8)"
           # echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
           # echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
           # echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
-#         if: always()
+        if: always()
         with:
           script: |
             # const colorRegex = /\u001b\[\d{1,2}m/g;
-            let output = `### open policy agent check: \`${{ steps.conftest.outcome }}\`
+            let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`\n
-            ${{ steps.conftest-result.outputs.result }}
+            ${{ steps.opa-result.outputs.result }}
             \`\`\`
             </details>
             
             end`
             
-            output = output.replace(colorRegex, "")
+            # output = output.replace(colorRegex, "")
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
