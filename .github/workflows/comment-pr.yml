@@ -34,9 +34,9 @@ jobs:
             
             \`\`\`\n
             # Deny
-            ${{ steps.opa-result.outputs.result.deny }}
+            ${{ steps.opa-result.outputs.result }}.deny
             # Warn
-            ${{ steps.opa-result.outputs.result.warn }}
+            ${{ steps.opa-result.outputs.result }}.warn
             \`\`\`
             </details>
             
