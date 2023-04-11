@@ -30,11 +30,11 @@ jobs:
         with:
           script: |
             const colorRegex = /\u001b\[\d{1,2}m/g;
-            let color = { "deny": "+ ", "warn": "!" }
-            let result = JSON.parse(${{ steps.opa-result.outputs.result }})
-            print(result)
-            let denied = result["deny"]
-            print(deny)
+            let color = { "deny": "+ ", "warn": "!" };
+            let result = JSON.parse(${{ steps.opa-result.outputs.result }});
+            print(result);
+            let denied = result["deny"];
+            print(deny);
             let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
