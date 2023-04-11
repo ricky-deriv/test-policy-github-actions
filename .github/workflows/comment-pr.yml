@@ -12,16 +12,17 @@ jobs:
         with:
           version: latest
       - name: run opa
-        id: conftest
+        id: opa
         run: |
-          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=json 
-#          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=json > conftest-result.txt
+          opa eval --data policies/tag-policy.rego --input aws/tfplan.json "data.main" --format=json > opa-result.json
       - name: print result into github output
         if: always()
-        id: conftest-result
+        id: opa-result
         run: |
-          echo "out: ${{ steps.conftest.outputs.stdout }}"
-          echo "err: ${{ steps.conftest.outputs.stderr }}"
+          output="$(cat opa-result.json)"
+          echo "result=$output" >> "${GITHUB_OUTPUT}"
+          echo "out $output"
+          echo "gitout $result"
           # delimiter="$(openssl rand -hex 8)"
           # echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
           # echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
