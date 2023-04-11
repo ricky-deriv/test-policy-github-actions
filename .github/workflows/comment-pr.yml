@@ -31,6 +31,9 @@ jobs:
           script: |
             const colorRegex = /\u001b\[\d{1,2}m/g;
             let color = { "deny": "+ ", "warn": "!" };
+            let raw = ${{ steps.opa-result.outputs.result }};
+            print(raw);
+            print(raw.deny);
             let result = JSON.parse(${{ steps.opa-result.outputs.result }});
             print(result);
             let denied = result["deny"];
