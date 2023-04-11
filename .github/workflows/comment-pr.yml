@@ -35,9 +35,9 @@ jobs:
             
             \`\`\`\n
             # Deny
-            ${result.deny}
+            ${result.deny.join("\n")}
             # Warn
-            ${result.warn}
+            ${result.warn.join("\n")}
             \`\`\`
             </details>
             
