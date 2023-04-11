@@ -32,13 +32,13 @@ jobs:
             const colorRegex = /\u001b\[\d{1,2}m/g;
             let color = { "deny": "+ ", "warn": "!" };
             let raw = ${{ steps.opa-result.outputs.result }};
-            deny = raw.deny.map(x => `${color.deny}${x}`)
+            let deny = raw.deny.map(x => `${color.deny}${x}`)
             console.log(deny)
             let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`\n
-            ${{ steps.opa-result.outputs.result }}
+            ${deny.join("")}
             \`\`\`
             </details>
             
