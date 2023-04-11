@@ -19,8 +19,8 @@ jobs:
         if: always()
         id: opa-result
         run: |
-          output="$(cat opa-result.json)"
-          echo "result=$output" >> "${GITHUB_OUTPUT}"
+          output="$(jq -c . opa-result.json)"
+          echo "result=${output}" >> "${GITHUB_OUTPUT}"
           # delimiter="$(openssl rand -hex 8)"
           # echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
           # echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
