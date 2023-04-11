@@ -29,14 +29,15 @@ jobs:
         if: always()
         with:
           script: |
+            const result = ${{ steps.opa-result.outputs.result }}
             let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`\n
             # Deny
-            ${{ steps.opa-result.outputs.result }}.deny
+            ${result.deny}
             # Warn
-            ${{ steps.opa-result.outputs.result }}.warn
+            ${result.warn}
             \`\`\`
             </details>
             
