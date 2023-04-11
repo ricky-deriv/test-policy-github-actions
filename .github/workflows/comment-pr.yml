@@ -33,7 +33,10 @@ jobs:
             <details><summary>policy check output</summary>
             
             \`\`\`\n
-            ${{ steps.opa-result.outputs.result }}
+            # Deny
+            ${{ steps.opa-result.outputs.result.deny }}
+            # Warn
+            ${{ steps.opa-result.outputs.result.warn }}
             \`\`\`
             </details>
             
