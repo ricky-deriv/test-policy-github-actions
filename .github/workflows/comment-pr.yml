@@ -21,10 +21,6 @@ jobs:
         run: |
           output="$(jq -c . opa-result.json)"
           echo "result=${output}" >> "${GITHUB_OUTPUT}"
-          # delimiter="$(openssl rand -hex 8)"
-          # echo "result<<${delimiter}" >> "${GITHUB_OUTPUT}"
-          # echo "$(cat conftest-result.txt)" >> "${GITHUB_OUTPUT}"
-          # echo "${delimiter}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
         if: always()
         with:
@@ -34,9 +30,10 @@ jobs:
             <details><summary>policy check output</summary>
             
             \`\`\`\n
-            # Deny
+            Deny: ${result.deny.length}
             ${result.deny.join("\n")}
-            # Warn
+            
+            # Warn ${result.warn.length}
             ${result.warn.join("\n")}
             \`\`\`
             </details>
