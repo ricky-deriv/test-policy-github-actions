@@ -1,6 +1,6 @@
 {
   "format_version": "1.1",
-  "terraform_version": "1.4.0",
+  "terraform_version": "1.4.4",
   "planned_values": {
     "root_module": {
       "resources": [
@@ -142,7 +142,7 @@
             "credit_specification": [],
             "get_password_data": false,
             "hibernation": null,
-            "instance_type": "t2.micro",
+            "instance_type": "t5.large",
             "launch_template": [],
             "source_dest_check": true,
             "tags": {
@@ -457,7 +457,7 @@
           "credit_specification": [],
           "get_password_data": false,
           "hibernation": null,
-          "instance_type": "t2.micro",
+          "instance_type": "t5.large",
           "launch_template": [],
           "source_dest_check": true,
           "tags": {
@@ -643,7 +643,7 @@
               "constant_value": "ami-005f9685cb30f234b"
             },
             "instance_type": {
-              "constant_value": "t2.micro"
+              "constant_value": "t5.large"
             },
             "tags": {
               "constant_value": {
