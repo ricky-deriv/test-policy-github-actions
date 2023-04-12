@@ -28,7 +28,7 @@ jobs:
             const result = ${{ steps.opa-result.outputs.result }}
             const colors = {"warn":"!", "deny":"-"};
             const deny = result.deny.map(x => `${colors.deny} ${x}`);
-            const warn = result.warn.map(x => `${colors.warn} ${warn}`); 
+            const warn = result.warn.map(x => `${colors.warn} ${x}`); 
             let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
