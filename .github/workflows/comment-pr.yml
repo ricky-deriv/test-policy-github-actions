@@ -32,7 +32,7 @@ jobs:
             let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
             <details><summary>policy check output</summary>
             
-            \`\`\`\n
+            \`\`\`diff\n
             Deny: ${deny.length}
             ${deny.join("\n")}
             
