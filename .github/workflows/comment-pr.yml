@@ -12,7 +12,7 @@ jobs:
         with:
           repository: ricky-deriv/aws-policy
           ref: main
-          path: policies
+          path: externalpolicies
       - name: test
         run: |
           ls
