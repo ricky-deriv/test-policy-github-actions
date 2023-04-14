@@ -7,6 +7,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+      - name: checkout aws policy repo
+        uses: actions/checkout@v3
+        with:
+          repository: ricky-deriv/aws-policy
+          ref: main
+          path: policies
+      - name: test
+        run: |
+          ls
+          ls policies
       - uses: open-policy-agent/setup-opa@v2
       - name: run opa
         id: opa
