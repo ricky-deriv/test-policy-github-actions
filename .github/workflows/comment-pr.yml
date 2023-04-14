@@ -12,11 +12,11 @@ jobs:
         with:
           repository: ricky-deriv/aws-policy
           ref: main
-          path: policies
+          path: external
       - name: test
         run: |
           ls
-          ls policies
+          ls external
       - uses: open-policy-agent/setup-opa@v2
       - name: run opa
         id: opa
