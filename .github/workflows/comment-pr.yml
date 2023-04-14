@@ -13,15 +13,11 @@ jobs:
           repository: ricky-deriv/aws-policy
           ref: main
           path: external
-      - name: test
-        run: |
-          ls
-          ls external
       - uses: open-policy-agent/setup-opa@v2
       - name: run opa
         id: opa
         run: |
-          opa eval -b ${{ github.workspace }}/policies/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
         id: opa-result
