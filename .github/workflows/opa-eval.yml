@@ -1,7 +1,7 @@
 name: OPA
 on: 
   workflow_run:
-    workflows: ["My Workflow"]
+    workflows: ["first-workflow"]
     types: 
       - completed
 jobs:
