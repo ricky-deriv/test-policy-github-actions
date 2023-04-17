@@ -13,8 +13,7 @@ jobs:
       - name: run opa
         id: opa
         run: |
-          opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty
- #         opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
         id: opa-result
@@ -31,7 +30,8 @@ jobs:
             const colors = {"warn":"!", "deny":"-"};
             const deny = result.deny.map(x => `${colors.deny} ${x}`);
             const warn = result.warn.map(x => `${colors.warn} ${x}`); 
-            let output = `### open policy agent check: \`${{ steps.opa.outcome }}\`
+            const outcome = deny.length > 0 ? 'Failure' : 'Success';
+            let output = `### open policy agent check: \`${outcome}\`
             <details><summary>policy check output</summary>
             
             \`\`\`diff\n
