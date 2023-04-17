@@ -13,11 +13,14 @@ jobs:
       - name: run opa
         id: opa
         run: |
-          opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty
+ #         opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
         id: opa-result
         run: |
+          echo "testinggg: ${{ steps.opa.outputs.stdout }}"
+          echo "testinggg: ${{ steps.opa.outputs.stderr }}"
           output="$(jq -c . opa-result.json)"
           echo "result=${output}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
