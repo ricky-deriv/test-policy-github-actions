@@ -1,0 +1,3 @@
+[submodule "aws-policy"]
+	path = aws-policy
+	url = git@github.com:ricky-deriv/aws-policy.git
