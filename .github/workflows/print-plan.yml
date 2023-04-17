@@ -11,4 +11,4 @@ jobs:
           submodules: recursive
       - name: print the tfplan.json file 
         run: |
-          cat tfplan.json
+          echo "first workflow"
