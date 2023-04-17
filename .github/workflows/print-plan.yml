@@ -1,4 +1,4 @@
-name: My Workflow
+name: first-workflow
 on:
   pull_request:
     types: [opened, synchronize]
