@@ -1,0 +1,13 @@
+name: OPA
+on: 
+  workflow_run:
+    workflows: [My Workflow]
+    types: 
+      - completed
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test
+        run: echo "hello from different workflow"
+    
