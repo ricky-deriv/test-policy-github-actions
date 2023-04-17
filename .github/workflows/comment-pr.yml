@@ -9,13 +9,11 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-      - name: test
-        run: ls aws-policy
       - uses: open-policy-agent/setup-opa@v2
       - name: run opa
         id: opa
         run: |
-          opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
         id: opa-result
