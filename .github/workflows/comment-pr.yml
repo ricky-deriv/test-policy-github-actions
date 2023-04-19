@@ -18,6 +18,7 @@ jobs:
         id: opa
         run: |
           opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          ls
       - name: print result into github output
         if: always()
         id: opa-result
