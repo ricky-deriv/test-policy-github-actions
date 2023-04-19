@@ -10,4 +10,15 @@ jobs:
     steps:
       - name: test
         run: echo "hello from different workflow"
+      - uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = "testing pr commeet"
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            })
     
