@@ -13,8 +13,11 @@ jobs:
       - uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            echo "${{ context.issue.number }}";
+            echo "${{ context.repo.owner }}";
           script: |
-            const output = "testing pr commeet"
+            const output = "testing pr commeet";
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
