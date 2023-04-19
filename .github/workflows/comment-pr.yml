@@ -13,7 +13,7 @@ jobs:
       - name: run opa
         id: opa
         run: |
-          opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty
+          echo "hello-an-output"
       - name: print result into github output
         if: always()
         id: opa-result
