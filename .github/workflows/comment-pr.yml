@@ -14,6 +14,7 @@ jobs:
         id: opa
         run: |
           opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          ls
       - name: print result into github output
         if: always()
         id: opa-result
@@ -52,3 +53,13 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+  second-job:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+      - name: test
+        run: |
+          ls
+          echo "end"
