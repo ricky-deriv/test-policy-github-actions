@@ -17,7 +17,7 @@ jobs:
         id: opa
         working-directory: ${{ matrix.dir }}
         run: |
-          opa eval -b ../aws-policy/ --input tfplan.json "data.main" --format=pretty > opa-result.json
+          opa eval -b ${{ github.workspace }}/aws-policy/ --input tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
         id: opa-result
