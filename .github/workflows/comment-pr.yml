@@ -15,7 +15,7 @@ jobs:
       - name: run opa
         id: opa
         run: |
-          docker run --rm openpolicyagent/opa:latest opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json'
+          docker run --rm openpolicyagent/opa:latest opa eval -b aws-policy/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
         id: opa-result
