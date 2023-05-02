@@ -1,11 +1,11 @@
 name: Policy evaluation workflow
 
 on:
-  workflow_call
+  workflow_call:
 jobs:
   echo-result:
     runs-on: ubuntu-latest
     steps:
     - name: test-echo
-        run: |
-          echo "hello from reusable workflow"
+      run: |
+        echo "hello from reusable workflow"
