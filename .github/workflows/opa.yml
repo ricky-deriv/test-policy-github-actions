@@ -9,4 +9,11 @@ jobs:
     - name: test-echo
       run: |
         echo "hello from reusable workflow"
+    - name: get-artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: tf-plan
+    - name: test
+      run: |
         ls
+        echo "end"
