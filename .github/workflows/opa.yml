@@ -1,0 +1,10 @@
+name: Opa Evaluation workflow
+on:
+  workflow_call:
+jobs:
+  testout:
+    runs-on: ubuntu-latest
+    steps:
+    - name: output commands
+      run: |
+        echo "hello from reusable workflow!"
