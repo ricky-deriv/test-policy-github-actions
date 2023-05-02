@@ -13,6 +13,12 @@ jobs:
           repository: ricky-deriv/aws-policy
           ref: main
           path: external
+      - name: archive terraform json plan
+        uses: actions/upload-artifact@v3
+        with:
+          name: tf-plan
+          path: aws/tfplan.json
+          retention-days: 5
       - uses: open-policy-agent/setup-opa@v2
       - name: run opa
         id: opa
