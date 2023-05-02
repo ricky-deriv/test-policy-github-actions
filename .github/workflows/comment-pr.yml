@@ -54,3 +54,5 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+  call-reusable:
+    uses: ./.github/workflows/opa.yml
