@@ -6,9 +6,17 @@ jobs:
   echo-result:
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
+    - name: checkout aws policy repo
+      uses: actions/checkout@v3
+      with:
+        repository: ricky-deriv/aws-policy
+        ref: main
+        path: external
     - name: test-echo
       run: |
         echo "hello from reusable workflow"
+        ls
     - name: get-artifact
       uses: actions/download-artifact@v3
       with:
@@ -17,3 +25,9 @@ jobs:
       run: |
         ls
         echo "end"
+    - uses: open-policy-agent/setup-opa@v2
+    - name: run opa
+      id: opa
+      run: |
+        opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+        ls
