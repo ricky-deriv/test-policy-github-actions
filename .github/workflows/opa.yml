@@ -16,7 +16,6 @@ jobs:
     - name: test-echo
       run: |
         echo "hello from reusable workflow"
-        ls
     - name: get-artifact
       uses: actions/download-artifact@v3
       with:
@@ -30,4 +29,8 @@ jobs:
       id: opa
       run: |
         opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
-        ls
+    - name: upload opa result
+      uses: actions/upload-artifact@v3
+      with:
+        name: opa-result
+        path: opa-result.json
