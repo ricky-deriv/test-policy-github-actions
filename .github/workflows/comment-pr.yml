@@ -54,3 +54,5 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+  opa-workflow:
+    uses: ./.github/workflows/opa.yml
