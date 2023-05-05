@@ -19,11 +19,22 @@ jobs:
           name: tf-plan
           path: aws/tfplan.json
           retention-days: 5
-      - uses: open-policy-agent/setup-opa@v2
-      - name: run opa
-        id: opa
+  call-reusable:
+    needs: comment
+    uses: ./.github/workflows/opa.yml
+  display-output:
+    needs: call-reusable
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3  
+      - name: get opa-results
+        uses: actions/download-artifact@v3
+        with:
+          name: opa-result
+      - name: check-if-opa-result
         run: |
-          opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          pwd
+          ls
       - name: print result into github output
         if: always()
         id: opa-result
@@ -61,23 +72,3 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
-  call-reusable:
-    needs: comment
-    uses: ./.github/workflows/opa.yml
-  display-output:
-    needs: call-reusable
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3  
-      - name: check-dir
-        run: |
-          pwd
-          ls
-      - name: get opa-results
-        uses: actions/download-artifact@v3
-        with:
-          name: opa-result
-      - name: check-if-opa-result
-        run: |
-          pwd
-          ls
