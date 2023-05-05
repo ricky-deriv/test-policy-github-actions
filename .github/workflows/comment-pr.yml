@@ -3,8 +3,20 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
-  terraform: 
+  initialize:
+    name: "get dirs"
     runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo matrix="$(jq -Mc -n '{"dir":["aws/","project/"]}'" >>$GITHUB_OUTPUT
+  terraform: 
+    needs: initialize
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v3
       - name: archive terraform json plan
@@ -13,6 +25,10 @@ jobs:
           name: tf-plan
           path: aws/tfplan.json
           retention-days: 5
+      - name: test-matrix
+        run: |
+          echo "testing matrix"
+          echo "dir: ${{ matrix.dir }}"
   opa-eval:
     needs: terraform
     uses: ./.github/workflows/opa.yml
