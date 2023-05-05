@@ -3,27 +3,35 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
-  comment: 
+  terraform: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: checkout aws policy repo
-        uses: actions/checkout@v3
+      - name: archive terraform json plan
+        uses: actions/upload-artifact@v3
         with:
-          repository: ricky-deriv/aws-policy
-          ref: main
-          path: external
-      - uses: open-policy-agent/setup-opa@v2
-      - name: run opa
-        id: opa
-        run: |
-          opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          name: tf-plan
+          path: aws/tfplan.json
+          retention-days: 5
+  opa-eval:
+    needs: terraform
+    uses: ./.github/workflows/opa.yml
+  display-output:
+    needs: opa-eval
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3  
+      - name: get opa-results
+        uses: actions/download-artifact@v3
+        with:
+          name: opa-result
       - name: print result into github output
         if: always()
         id: opa-result
         run: |
           output="$(jq -c . opa-result.json)"
           echo "result=${output}" >> "${GITHUB_OUTPUT}"
+          ls
       - uses: actions/github-script@v6
         if: always()
         with:
