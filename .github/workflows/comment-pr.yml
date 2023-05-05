@@ -3,27 +3,21 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
-  comment: 
+  terraform: 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: checkout aws policy repo
-        uses: actions/checkout@v3
-        with:
-          repository: ricky-deriv/aws-policy
-          ref: main
-          path: external
       - name: archive terraform json plan
         uses: actions/upload-artifact@v3
         with:
           name: tf-plan
           path: aws/tfplan.json
           retention-days: 5
-  call-reusable:
-    needs: comment
+  opa-eval:
+    needs: terraform
     uses: ./.github/workflows/opa.yml
   display-output:
-    needs: call-reusable
+    needs: opa-eval
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3  
@@ -31,10 +25,6 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: opa-result
-      - name: check-if-opa-result
-        run: |
-          pwd
-          ls
       - name: print result into github output
         if: always()
         id: opa-result
