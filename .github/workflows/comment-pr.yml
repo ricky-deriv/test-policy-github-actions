@@ -63,3 +63,18 @@ jobs:
             })
   call-reusable:
     uses: ./.github/workflows/opa.yml
+  display-output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: check-dir
+        run: |
+          pwd
+          ls
+      - name: get opa-results
+        uses: actions/download-artifact@v3
+        with:
+          name: opa-result
+      - name: check-if-opa-result
+        run: |
+          pwd
+          ls
