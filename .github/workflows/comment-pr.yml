@@ -3,13 +3,7 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
-  checkout-code:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
   comment: 
-    needs: checkout-code
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -71,9 +65,10 @@ jobs:
     needs: comment
     uses: ./.github/workflows/opa.yml
   display-output:
-    needs: [checkout-code, call-reusable]
+    needs: call-reusable
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3  
       - name: check-dir
         run: |
           pwd
