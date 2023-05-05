@@ -11,7 +11,7 @@ jobs:
     steps:
       - id: set-matrix
         run: |
-          echo matrix="$(jq -Mc -n '{"dir":["aws","project"]}'" >>$GITHUB_OUTPUT
+          echo matrix="$(jq -Mc -n '{"dir":["aws","project"]}')" >>$GITHUB_OUTPUT
   terraform: 
     needs: initialize
     runs-on: ubuntu-latest
