@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
+    outputs:
+      plan-json: ${{ steps.plan.outputs.opa-result }}
     steps:
       - uses: actions/checkout@v3
       - name: archive terraform json plan
@@ -29,9 +31,20 @@ jobs:
         run: |
           echo "testing matrix"
           echo "dir: ${{ matrix.dir }}"
+      - name: print result into github output
+        if: always()
+        id: opa-result
+        working-directory: ${{ matrix.dir }}
+        run: |
+          output="$(jq -c . opa-result.json)"
+          echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
   opa-eval:
     needs: terraform
+    strategy:
+      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     uses: ./.github/workflows/opa.yml
+    with: 
+      opa-result: ${{ needs.terraform.outputs.plan-json }}
   display-output:
     needs: opa-eval
     runs-on: ubuntu-latest
