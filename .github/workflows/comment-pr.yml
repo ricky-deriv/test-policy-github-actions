@@ -37,7 +37,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
         run: |
           ls
-          output="$(jq -c . opa-result.json)"
+          output="$(jq -c . tfplan.json)"
           echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
   opa-eval:
     needs: terraform
