@@ -40,7 +40,7 @@ jobs:
           output="$(jq -c . tfplan.json)"
           echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
   opa-eval:
-    needs: terraform
+    needs: [ terraform, initialize ]
     strategy:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     uses: ./.github/workflows/opa.yml
