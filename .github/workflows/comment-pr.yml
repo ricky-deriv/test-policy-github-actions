@@ -36,6 +36,7 @@ jobs:
         id: opa-result
         working-directory: ${{ matrix.dir }}
         run: |
+          ls
           output="$(jq -c . opa-result.json)"
           echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
   opa-eval:
