@@ -47,7 +47,7 @@ jobs:
     with: 
       opa-result: ${{ needs.terraform.outputs.plan-json }}
   display-output:
-    needs: opa-eval
+    needs: [ opa-eval, terraform ]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3  
@@ -59,6 +59,7 @@ jobs:
         if: always()
         id: opa-result
         run: |
+          echo "test job output: ${{ needs.terraform.outputs.plan-json }}"
           output="$(jq -c . opa-result.json)"
           echo "result=${output}" >> "${GITHUB_OUTPUT}"
           ls
