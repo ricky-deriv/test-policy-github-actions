@@ -45,7 +45,7 @@ jobs:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     uses: ./.github/workflows/opa.yml
     with: 
-      opa-result: ${{ needs.terraform.outputs.plan-json }}
+      opa-result: ${{ fromJson(needs.terraform.outputs.plan-json) }}
   display-output:
     needs: opa-eval
     runs-on: ubuntu-latest
