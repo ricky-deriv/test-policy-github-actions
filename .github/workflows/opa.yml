@@ -6,6 +6,9 @@ on:
       opa-result:
         required: true
         type: string
+      dir:
+        required: true
+        type: string
 jobs:
   echo-result:
     runs-on: ubuntu-latest
@@ -33,6 +36,8 @@ jobs:
       id: opa
       run: |
         echo '${{ inputs.opa-result }}' > aws/new-tfplan.json
+        echo "test dir input..."
+        echo "dir: ${{ inputs.dir }}"
         opa eval -b ${{ github.workspace }}/external/ --input aws/new-tfplan.json "data.main" --format=pretty > opa-result.json
     - name: upload opa result
       uses: actions/upload-artifact@v3
