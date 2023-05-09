@@ -18,7 +18,7 @@ jobs:
     strategy:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     outputs:
-      plan-json: ${{ steps.plan.outputs.opa-result }}
+      plan-json: ${{ steps.opa-result.outputs.opa-result }}
     steps:
       - uses: actions/checkout@v3
       - name: archive terraform json plan
