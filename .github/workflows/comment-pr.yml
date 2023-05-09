@@ -42,7 +42,7 @@ jobs:
   opa-eval:
     needs: [ terraform, initialize ]
     strategy:
-      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
+      matrix: ${{ needs.initialize.outputs.matrix }}
     uses: ./.github/workflows/opa.yml
     with: 
       opa-result: ${{ fromJson(needs.terraform.outputs.plan-json) }}
