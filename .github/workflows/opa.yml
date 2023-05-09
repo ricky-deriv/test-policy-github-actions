@@ -33,7 +33,7 @@ jobs:
       id: opa
       run: |
         echo "print github-output into plan file"
-        echo "${{ inputs.opa-result }}" > aws/new-tfplan.json
+        echo "${{ fromJson(inputs.opa-result) }}" > aws/new-tfplan.json
         echo "cat the new file in aws..."
         ls aws
         cat aws/new-tfplan.json
