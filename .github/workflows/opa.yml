@@ -34,11 +34,10 @@ jobs:
     - uses: open-policy-agent/setup-opa@v2
     - name: run opa
       id: opa
+      working-directory: ${{ inputs.dir }}
       run: |
-        echo '${{ inputs.opa-result }}' > aws/new-tfplan.json
-        echo "test dir input..."
-        echo "dir: ${{ inputs.dir }}"
-        opa eval -b ${{ github.workspace }}/external/ --input aws/new-tfplan.json "data.main" --format=pretty > opa-result.json
+        echo '${{ inputs.opa-result }}' > new-tfplan.json
+        opa eval -b ${{ github.workspace }}/external/ --input new-tfplan.json "data.main" --format=pretty > opa-result.json
     - name: upload opa result
       uses: actions/upload-artifact@v3
       with:
