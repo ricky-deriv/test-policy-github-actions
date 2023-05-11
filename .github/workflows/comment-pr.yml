@@ -46,6 +46,12 @@ jobs:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v3
+      - name: test dir
+        run: |
+          echo "check dir..."
+          ls
+          echo "lpl"
+          ls /
       - name: reusable-workflow
         id: reusable
         uses: ./.github/workflows/opa.yml
