@@ -50,8 +50,12 @@ jobs:
         run: |
           echo "check dir..."
           ls -a
-          echo "lpl"
-          ls /
+          echo "---"
+          ls .github
+          echo "---"
+          ls .github/workflows
+          echo "---"
+          cat ./.github/workflows/opa.yml
       - name: reusable-workflow
         id: reusable
         uses: ./.github/workflows/opa.yml
