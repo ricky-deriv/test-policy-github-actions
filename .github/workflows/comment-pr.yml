@@ -48,8 +48,10 @@ jobs:
       opa-result: ${{ needs.terraform.outputs.plan-json }}
       dir: ${{ matrix.dir }}
   display-output:
-    needs: opa-eval
+    needs: [ initialize, opa-eval ]
     runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v3  
       - name: get opa-results
@@ -73,6 +75,7 @@ jobs:
             const warn = result.warn.map(x => `${colors.warn} ${x}`); 
             const outcome = deny.length > 0 ? 'Failure' : 'Success';
             let output = `### open policy agent check: \`${outcome}\`
+            Directory: \`${{ matrix.dir }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`diff\n
