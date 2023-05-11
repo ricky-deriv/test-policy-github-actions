@@ -42,4 +42,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: opa-result
-        path: opa-result.json
+        path: ${{ inputs.dir }}opa-result.json
