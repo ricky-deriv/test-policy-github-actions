@@ -45,7 +45,7 @@ jobs:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     uses: ./.github/workflows/opa.yml
     with: 
-      opa-result: ${{ needs.terraform.outputs.plan-json }}
+      tfplan: ${{ needs.terraform.outputs.plan-json }}
       dir: ${{ matrix.dir }}
   display-output:
     needs: [ initialize, opa-eval ]
