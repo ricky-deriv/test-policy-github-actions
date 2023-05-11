@@ -49,7 +49,7 @@ jobs:
       - name: test dir
         run: |
           echo "check dir..."
-          ls
+          ls -a
           echo "lpl"
           ls /
       - name: reusable-workflow
