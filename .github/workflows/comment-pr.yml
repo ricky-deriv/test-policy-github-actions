@@ -40,33 +40,13 @@ jobs:
           output="$(jq -c . tfplan.json)"
           echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
   opa-eval:
-    runs-on: ubuntu-latest
     needs: [ terraform, initialize ]
     strategy:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
-    steps:
-      - uses: actions/checkout@v3
-      - name: test dir
-        run: |
-          echo "check dir..."
-          ls -a
-          echo "---"
-          ls .github
-          echo "---"
-          ls .github/workflows
-          echo "---"
-          cat ./.github/workflows/opa.yml
-      - name: reusable-workflow
-        id: reusable
-        uses: ./.github/workflows/opa.yml
-        with: 
-          tfplan: ${{ needs.terraform.outputs.plan-json }}
-          dir: ${{ matrix.dir }}
-      - name: test output
-        id: test-out
-        run: |
-          echo "test output from prev step reusable workflow..."
-          echo "outz: ${{ needs.reusable.outputs.opa-result }}"
+    uses: ./.github/workflows/opa.yml
+    with: 
+      tfplan: ${{ needs.terraform.outputs.plan-json }}
+      dir: ${{ matrix.dir }}
   display-output:
     needs: [ initialize, opa-eval ]
     runs-on: ubuntu-latest
