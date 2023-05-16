@@ -57,7 +57,7 @@ jobs:
       - name: name artifacts
         working-directory: ${{ matrix.dir }}
         run: |
-          new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+          new_name=$(echo ${{ matrix.dir }} | tr '/' ' ')
           echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
       - name: get opa-results
         uses: actions/download-artifact@v3
