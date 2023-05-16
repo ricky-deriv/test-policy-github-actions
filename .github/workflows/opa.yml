@@ -56,9 +56,9 @@ jobs:
     - name: edit dir name for artifact
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
-        echo "artifact-name=${new_name}" >> "${GITHUB_OUTPUT}"
+        echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
     - name: upload opa result
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ artifact-name }}-opa-result
+        name: ${{ env.artifact-name }}-opa-result
         path: ${{ inputs.dir }}/opa-result.json
