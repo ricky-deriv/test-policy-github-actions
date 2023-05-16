@@ -45,6 +45,9 @@ jobs:
       run: |
         echo '${{ inputs.tfplan }}' > new-tfplan.json
         opa eval -b ${{ github.workspace }}/external/ --input new-tfplan.json "data.main" --format=pretty > opa-result.json
+        echo "debugging..."
+        pwd
+        cat opa-result.json
     - name: print result into github output
       if: always()
       id: opa-result
