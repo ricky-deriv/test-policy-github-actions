@@ -54,13 +54,19 @@ jobs:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     steps:
       - uses: actions/checkout@v3  
+      - name: name artifacts
+        working-directory: ${{ matrix.dir }}
+        run: |
+          new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+          echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
       - name: get opa-results
         uses: actions/download-artifact@v3
         with:
-          name: opa-result
+          name: ${{ env.artifact-name }}-opa-result
       - name: print result into github output
         if: always()
         id: opa-result
+        working-directory: ${{ matrix.dir }}
         run: |
           output="$(jq -c . opa-result.json)"
           echo "result=${output}" >> "${GITHUB_OUTPUT}"
