@@ -69,6 +69,7 @@ jobs:
         working-directory: ${{ matrix.dir }}
         run: |
           ls
+          echo "${{ env.artifact-name }}"
       - uses: actions/github-script@v6
         if: always()
         with:
