@@ -68,6 +68,9 @@ jobs:
         id: opa-result
         working-directory: ${{ matrix.dir }}
         run: |
+          echo "ls artifact name..."
+          ls ${{ env.artifact-name }}-opa-result
+          echo "next ls current.."
           ls
           echo "${{ env.artifact-name }}"
       - uses: actions/github-script@v6
