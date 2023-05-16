@@ -60,5 +60,5 @@ jobs:
     - name: upload opa result
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.artifact-name }}-opa-result
+        name: ${{ env.artifact-name }} opa-result
         path: ${{ inputs.dir }}/opa-result.json
