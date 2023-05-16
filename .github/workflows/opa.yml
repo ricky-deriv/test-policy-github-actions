@@ -53,8 +53,12 @@ jobs:
         ls
         output="$(jq -c . opa-result.json)"
         echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
+    - name: edit dir name for artifact
+      run: |
+        new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+        echo "artifact-name=${new_name}" >> "${GITHUB_OUTPUT}"
     - name: upload opa result
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ inputs.dir }}-opa-result
+        name: ${{ artifact-name }}-opa-result
         path: ${{ inputs.dir }}/opa-result.json
