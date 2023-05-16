@@ -70,9 +70,8 @@ jobs:
           pwd
           echo "next ls current.."
           ls
-          echo "ls artifact name..."
-          ls ${{ env.artifact-name }}-opa-result
-          echo "${{ env.artifact-name }}"
+          output="$(jq -c . opa-result.json)"
+          echo "result=${output}" >> "${GITHUB_OUTPUT}"
       - uses: actions/github-script@v6
         if: always()
         with:
