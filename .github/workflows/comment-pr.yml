@@ -12,6 +12,21 @@ jobs:
       - id: set-matrix
         run: |
           echo matrix="$(jq -Mc -n '{"dir":["aws","project"]}')" >>$GITHUB_OUTPUT
+  test-upload-artifact:
+    name: "test artifact"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: upload tfplan result
+        uses: actions/upload-artifact@v3
+        with:
+          name: aws-opa-result
+          path: aws/provider.tf
+      - name: upload tfplan result
+        uses: actions/upload-artifact@v3
+        with:
+          name: project-opa-result
+          path: project/provider.tf
   terraform: 
     needs: initialize
     runs-on: ubuntu-latest
