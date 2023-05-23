@@ -7,16 +7,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: checkout aws policy repo
+      - name: clone policy repo
         uses: actions/checkout@v3
         with:
           repository: ricky-deriv/aws-policy
           ref: main
-          path: external
+          token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
       - uses: open-policy-agent/setup-opa@v2
       - name: run opa
         id: opa
         run: |
+          echo "printnint "
+          ls
           opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
       - name: print result into github output
         if: always()
