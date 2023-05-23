@@ -51,6 +51,7 @@ jobs:
     with: 
       tfplan: ${{ needs.terraform.outputs.plan-json }}
       dir: ${{ matrix.dir }}
+    secrets: inherit
   display-output:
     needs: [ initialize, opa-eval ]
     runs-on: ubuntu-latest
