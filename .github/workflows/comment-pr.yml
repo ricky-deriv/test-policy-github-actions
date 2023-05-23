@@ -32,6 +32,9 @@ jobs:
         run: |
           echo "testing matrix"
           echo "dir: ${{ matrix.dir }}"
+      - name: testing sec
+        run: |
+          echo "sec ${{ secrets.AWS_POLICY_REPO_TOKEN }}"
       - name: print result into github output
         if: always()
         id: opa-result
