@@ -20,6 +20,9 @@ jobs:
     outputs:
       opa-result: ${{ steps.opa-result.outputs.opa-result }}
     steps:
+    - name: testing
+      run: |
+        echo "sec ${{ secrets.AWS_POLICY_REPO_TOKEN }}"
     - uses: actions/checkout@v3
     - name: checkout aws policy repo
       uses: actions/checkout@v3
