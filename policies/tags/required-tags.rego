@@ -4,6 +4,8 @@ import input as params
 import future.keywords
 import data.allowed_values
 
+data.allowed_values
+
 required_tags = { "Name", "Service", "Cluster", "Env", "OS" }
 allowed_tags_values = {
     "Service": ["api", "qa-box"],
@@ -27,6 +29,7 @@ deny[msg] {
 
 # warn if instances for creation have tag values that are not included
 warn[msg] {
+    print("test ", data.allowed_values.allowed_tags_values)
     r := params.resource_changes[_]
     r.type == "aws_instance"
     r_address = r.address
