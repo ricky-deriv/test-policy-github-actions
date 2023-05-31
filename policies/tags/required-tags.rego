@@ -5,12 +5,6 @@ import future.keywords
 import data.allowed_values
 
 required_tags = { "Name", "Service", "Cluster", "Env", "OS" }
-allowed_tags_values = {
-    "Service": ["api", "qa-box"],
-    "Cluster": ["api", "qa-box"],
-    "Env": ["qa", "canary"],
-    "OS": ["linux", "windows"]
-}
 
 # deny if instances for creation do not have complete required tags
 deny[msg] {
@@ -32,7 +26,7 @@ warn[msg] {
     r.type == "aws_instance"
     r_address = r.address
     "create" in r.change.actions
-    restricted_tag_keys := object.keys(allowed_tags_values)
+    restricted_tag_keys := object.keys(data.allowed_values.allowed_tags_values)
     tags := r.change.after.tags
     non_compliant_tags := [{x: tags[x]} | x := restricted_tag_keys[_]; not tags[x] in allowed_tags_values[x] ]
     count(non_compliant_tags) != 0
