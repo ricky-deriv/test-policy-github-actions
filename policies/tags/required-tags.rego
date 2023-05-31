@@ -2,6 +2,7 @@ package main
 
 import input as params
 import future.keywords
+import data.allowed_values
 
 required_tags = { "Name", "Service", "Cluster", "Env", "OS" }
 allowed_tags_values = {
