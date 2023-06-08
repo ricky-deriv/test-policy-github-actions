@@ -32,14 +32,6 @@ jobs:
           name: ${{ env.artifact-name }}-tf-plan
           path: ${{ matrix.dir }}/tfplan.json
           retention-days: 2
-      - name: print result into github output
-        if: always()
-        id: tf-result
-        working-directory: ${{ matrix.dir }}
-        run: |
-          ls
-          output="$(jq -c . tfplan.json)"
-          echo "tf-result=${output}" >> "${GITHUB_OUTPUT}"
     
   opa-eval:
     needs: [ terraform, initialize ]
@@ -47,7 +39,6 @@ jobs:
       matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
     uses: ./.github/workflows/opa.yml
     with: 
-      tfplan: ${{ needs.terraform.outputs.plan-json }}
       dir: ${{ matrix.dir }}
     secrets: inherit
   
