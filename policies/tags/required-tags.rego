@@ -2,9 +2,11 @@ package main
 
 import input as params
 import future.keywords
+import data.allowed_values
 
 required_tags = { "Name", "Service", "Cluster", "Env", "OS" }
-allowed_tags_values = {
+
+out_tags_values = {
     "Service": ["api", "qa-box"],
     "Cluster": ["api", "qa-box"],
     "Env": ["qa", "canary"],
@@ -26,13 +28,14 @@ deny[msg] {
 
 # warn if instances for creation have tag values that are not included
 warn[msg] {
+    allowed = data.allowed_values.allowed_tags_values
     r := params.resource_changes[_]
     r.type == "aws_instance"
     r_address = r.address
     "create" in r.change.actions
-    restricted_tag_keys := object.keys(allowed_tags_values)
+    restricted_tag_keys := object.keys(allowed)
     tags := r.change.after.tags
-    non_compliant_tags := [{x: tags[x]} | x := restricted_tag_keys[_]; not tags[x] in allowed_tags_values[x] ]
+    non_compliant_tags := [{x: tags[x]} | x := restricted_tag_keys[_]; not tags[x] in allowed[x] ]
     count(non_compliant_tags) != 0
 
     msg := sprintf("Tag values are not compliant on: %v \n\tNon-compliant tags: %v", [r_address, non_compliant_tags])
