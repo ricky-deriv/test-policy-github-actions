@@ -2,10 +2,27 @@ name: Policy evaluation workflow
 
 on:
   workflow_call:
+    inputs:
+      tfplan:
+        required: true
+        type: string
+      dir:
+        required: true
+        type: string
+    outputs: 
+      opa-result:
+        description: "The result of policy evaluation"
+        value: ${{ jobs.echo-result.outputs.opa-result }}
+      
 jobs:
   echo-result:
     runs-on: ubuntu-latest
+    outputs:
+      opa-result: ${{ steps.opa-result.outputs.opa-result }}
     steps:
+    - name: testing
+      run: |
+        echo "sec ${{ secrets.AWS_POLICY_REPO_TOKEN }}"
     - uses: actions/checkout@v3
     - name: checkout aws policy repo
       uses: actions/checkout@v3
@@ -13,13 +30,10 @@ jobs:
         repository: ricky-deriv/aws-policy
         ref: main
         path: external
+        token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
     - name: test-echo
       run: |
         echo "hello from reusable workflow"
-    - name: get-artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: tf-plan
     - name: test
       run: |
         ls
@@ -27,10 +41,29 @@ jobs:
     - uses: open-policy-agent/setup-opa@v2
     - name: run opa
       id: opa
+      working-directory: ${{ inputs.dir }}
       run: |
-        opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+        echo '${{ inputs.tfplan }}' > new-tfplan.json
+        opa eval -b ${{ github.workspace }}/external/ --input new-tfplan.json "data.main" --format=pretty > opa-result.json
+        echo "debugging..."
+        pwd
+        cat opa-result.json
+    - name: print result into github output
+      if: always()
+      id: opa-result
+      working-directory: ${{ inputs.dir }}
+      run: |
+        ls
+        output="$(jq -c . opa-result.json)"
+        echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
+    - name: edit dir name for artifact
+      run: |
+        new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+        echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+        echo "printinng ${{inputs.dir}} opa..."
+        cat ${{ inputs.dir }}/opa-result.json
     - name: upload opa result
       uses: actions/upload-artifact@v3
       with:
-        name: opa-result
-        path: opa-result.json
+        name: ${{ env.artifact-name }}-opa-result
+        path: ${{ inputs.dir }}/opa-result.json
