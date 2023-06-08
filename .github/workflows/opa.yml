@@ -28,13 +28,20 @@ jobs:
         ref: main
         path: external
         token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
+    - name: edit dir name for artifact
+        run: |
+          new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+          echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+    - name: get tf-results
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.artifact-name }}-tf-result
     - uses: open-policy-agent/setup-opa@v2
     - name: run opa
       id: opa
       working-directory: ${{ inputs.dir }}
       run: |
-        echo '${{ inputs.tfplan }}' > new-tfplan.json
-        opa eval -b ${{ github.workspace }}/external/ --input new-tfplan.json "data.main" --format=pretty > opa-result.json
+        opa eval -b ${{ github.workspace }}/external/ --input tfplan.json "data.main" --format=pretty > opa-result.json
     - name: print result into github output
       if: always()
       id: opa-result

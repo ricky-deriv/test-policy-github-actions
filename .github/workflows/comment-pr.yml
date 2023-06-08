@@ -21,13 +21,16 @@ jobs:
     outputs:
       plan-json: ${{ steps.tf-result.outputs.tf-result }}
     steps:
-      # not used...
       - uses: actions/checkout@v3
+      - name: edit dir name for artifact
+        run: |
+          new_name=$(echo ${{ matrix.dir }} | tr '/' ' ')
+          echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
       - name: archive terraform json plan
         uses: actions/upload-artifact@v3
         with:
-          name: tf-plan
-          path: aws/tfplan.json
+          name: ${{ env.artifact-name }}-tf-plan
+          path: ${{ matrix.dir }}/tfplan.json
           retention-days: 2
       - name: print result into github output
         if: always()
