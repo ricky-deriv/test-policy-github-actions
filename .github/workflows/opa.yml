@@ -20,6 +20,9 @@ jobs:
     outputs:
       opa-result: ${{ steps.opa-result.outputs.opa-result }}
     steps:
+    - name: testing
+      run: |
+        echo "sec ${{ secrets.AWS_POLICY_REPO_TOKEN }}"
     - uses: actions/checkout@v3
     - name: checkout aws policy repo
       uses: actions/checkout@v3
@@ -27,13 +30,10 @@ jobs:
         repository: ricky-deriv/aws-policy
         ref: main
         path: external
+        token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
     - name: test-echo
       run: |
         echo "hello from reusable workflow"
-    - name: get-artifact
-      uses: actions/download-artifact@v3
-      with:
-        name: tf-plan
     - name: test
       run: |
         ls
@@ -45,6 +45,9 @@ jobs:
       run: |
         echo '${{ inputs.tfplan }}' > new-tfplan.json
         opa eval -b ${{ github.workspace }}/external/ --input new-tfplan.json "data.main" --format=pretty > opa-result.json
+        echo "debugging..."
+        pwd
+        cat opa-result.json
     - name: print result into github output
       if: always()
       id: opa-result
@@ -57,6 +60,8 @@ jobs:
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
         echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+        echo "printinng ${{inputs.dir}} opa..."
+        cat ${{ inputs.dir }}/opa-result.json
     - name: upload opa result
       uses: actions/upload-artifact@v3
       with:
