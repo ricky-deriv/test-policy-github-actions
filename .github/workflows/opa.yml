@@ -29,13 +29,13 @@ jobs:
         path: external
         token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
     - name: edit dir name for artifact
-        run: |
-          new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
-          echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+      run: |
+        new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+        echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
     - name: get tf-results
-        uses: actions/download-artifact@v3
-        with:
-          name: ${{ env.artifact-name }}-tf-result
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ env.artifact-name }}-tf-result
     - uses: open-policy-agent/setup-opa@v2
     - name: run opa
       id: opa
