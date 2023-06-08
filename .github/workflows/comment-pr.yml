@@ -3,6 +3,15 @@ on:
   pull_request:
     types: [opened, synchronize]
 jobs:
+  initialize:
+    name: "get dirs"
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+      - id: set-matrix
+        run: |
+          echo matrix="$(jq -Mc -n '{"dir":["aws","project"]}')" >>$GITHUB_OUTPUT
   comment: 
     runs-on: ubuntu-latest
     steps:
