@@ -35,7 +35,7 @@ jobs:
     - name: get tf-results
       uses: actions/download-artifact@v3
       with:
-        name: ${{ env.artifact-name }}-tf-result
+        name: ${{ env.artifact-name }}-tf-plan
     - uses: open-policy-agent/setup-opa@v2
     - name: run opa
       id: opa
