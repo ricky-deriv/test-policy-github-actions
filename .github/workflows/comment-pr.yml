@@ -12,21 +12,58 @@ jobs:
       - id: set-matrix
         run: |
           echo matrix="$(jq -Mc -n '{"dir":["aws","project"]}')" >>$GITHUB_OUTPUT
-  comment: 
+  
+  terraform:
+    needs: initialize
     runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
+    outputs:
+      plan-json: ${{ steps.tf-result.outputs.tf-result }}
     steps:
+      # not used...
       - uses: actions/checkout@v3
-      - name: checkout aws policy repo
-        uses: actions/checkout@v3
+      - name: archive terraform json plan
+        uses: actions/upload-artifact@v3
         with:
-          repository: ricky-deriv/aws-policy
-          ref: main
-          path: external
-      - uses: open-policy-agent/setup-opa@v2
-      - name: run opa
-        id: opa
+          name: tf-plan
+          path: aws/tfplan.json
+          retention-days: 2
+      - name: print result into github output
+        if: always()
+        id: tf-result
+        working-directory: ${{ matrix.dir }}
         run: |
-          opa eval -b ${{ github.workspace }}/external/ --input aws/tfplan.json "data.main" --format=pretty > opa-result.json
+          ls
+          output="$(jq -c . tfplan.json)"
+          echo "tf-result=${output}" >> "${GITHUB_OUTPUT}"
+    
+  opa-eval:
+    needs: [ terraform, initialize ]
+    strategy:
+      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
+    uses: ./.github/workflows/opa.yml
+    with: 
+      tfplan: ${{ needs.terraform.outputs.plan-json }}
+      dir: ${{ matrix.dir }}
+    secrets: inherit
+  
+  display-output:
+    needs: [ initialize, opa-eval ]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix: ${{fromJson(needs.initialize.outputs.matrix)}}
+    steps:
+      - uses: actions/checkout@v3  
+      - name: name artifacts
+        working-directory: ${{ matrix.dir }}
+        run: |
+          new_name=$(echo ${{ matrix.dir }} | tr '/' ' ')
+          echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+      - name: get opa-results
+        uses: actions/download-artifact@v3
+        with:
+          name: ${{ env.artifact-name }}-opa-result
       - name: print result into github output
         if: always()
         id: opa-result
@@ -43,6 +80,7 @@ jobs:
             const warn = result.warn.map(x => `${colors.warn} ${x}`); 
             const outcome = deny.length > 0 ? 'Failure' : 'Success';
             let output = `### open policy agent check: \`${outcome}\`
+            Directory: \`${{ matrix.dir }}\`
             <details><summary>policy check output</summary>
             
             \`\`\`diff\n

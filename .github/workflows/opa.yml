@@ -1,0 +1,53 @@
+name: Policy evaluation workflow
+
+on:
+  workflow_call:
+    inputs:
+      tfplan:
+        required: true
+        type: string
+      dir:
+        required: true
+        type: string
+    outputs: 
+      opa-result:
+        description: "The result of policy evaluation"
+        value: ${{ jobs.echo-result.outputs.opa-result }}
+      
+jobs:
+  echo-result:
+    runs-on: ubuntu-latest
+    outputs:
+      opa-result: ${{ steps.opa-result.outputs.opa-result }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: checkout aws policy repo
+      uses: actions/checkout@v3
+      with:
+        repository: ricky-deriv/aws-policy
+        ref: main
+        path: external
+        token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
+    - uses: open-policy-agent/setup-opa@v2
+    - name: run opa
+      id: opa
+      working-directory: ${{ inputs.dir }}
+      run: |
+        echo '${{ inputs.tfplan }}' > new-tfplan.json
+        opa eval -b ${{ github.workspace }}/external/ --input new-tfplan.json "data.main" --format=pretty > opa-result.json
+    - name: print result into github output
+      if: always()
+      id: opa-result
+      working-directory: ${{ inputs.dir }}
+      run: |
+        output="$(jq -c . opa-result.json)"
+        echo "opa-result=${output}" >> "${GITHUB_OUTPUT}"
+    - name: edit dir name for artifact
+      run: |
+        new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
+        echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+    - name: upload opa result
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.artifact-name }}-opa-result
+        path: ${{ inputs.dir }}/opa-result.json
