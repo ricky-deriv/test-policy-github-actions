@@ -18,20 +18,17 @@ jobs:
       run: |
         ssh-agent -a $SSH_AUTH_SOCK > /dev/null
         ssh-add - <<< "${{ secrets.POLICY_PRIVATE_KEY }}"
-    - name: test
-      env:
-          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
-      run: |
-        git clone git@github.com:ricky-deriv/aws-policy.git polcieci
-        ls 
-        ls polcieci
+    # - name: test
+    #   env:
+    #       SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+    #   run: |
+    #     git clone git@github.com:ricky-deriv/aws-policy.git external
     - name: checkout aws policy repo
       uses: actions/checkout@v3
       with:
         repository: ricky-deriv/aws-policy
         ref: main
         path: external
-        token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
     - name: edit dir name for artifact
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
