@@ -44,6 +44,7 @@ jobs:
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
         echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+        ls
         cat opa-result.json
     - name: upload opa result
       if: always()
