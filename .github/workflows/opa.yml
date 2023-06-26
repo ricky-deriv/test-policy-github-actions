@@ -41,6 +41,7 @@ jobs:
         ls non-existent 2> opa-result.json
     - name: edit dir name for artifact
       if: always()
+      working-directory: ${{ inputs.dir }}
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
         echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
