@@ -37,11 +37,16 @@ jobs:
       working-directory: ${{ inputs.dir }}
       run: |
         opa eval -b ${{ github.workspace }}/policies/ --input tfplan.json "data.main" --format=pretty > opa-result.json
+        ls
+        ls non-existent 2> opa-result.json
     - name: edit dir name for artifact
+      if: always()
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
         echo "artifact-name=${new_name}" >> "${GITHUB_ENV}"
+        cat opa-result.json
     - name: upload opa result
+      if: always()
       uses: actions/upload-artifact@v3
       with:
         name: ${{ env.artifact-name }}-opa-result
