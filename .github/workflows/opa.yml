@@ -12,13 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: checkout aws policy repo
-      uses: actions/checkout@v3
-      with:
-        repository: ricky-deriv/aws-policy
-        ref: main
-        path: external
-        token: ${{ secrets.AWS_POLICY_REPO_TOKEN }}
+    - name: Setup SSH Keys and known_hosts
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        ssh-agent -a $SSH_AUTH_SOCK > /dev/null
+        ssh-add - <<< "${{ secrets.POLICY_PRIVATE_KEY }}"
+    - name: get policies
+      env:
+          SSH_AUTH_SOCK: /tmp/ssh_agent.sock
+      run: |
+        git clone git@github.com:ricky-deriv/aws-policy.git policies
     - name: edit dir name for artifact
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
@@ -32,7 +36,7 @@ jobs:
       id: opa
       working-directory: ${{ inputs.dir }}
       run: |
-        opa eval -b ${{ github.workspace }}/external/ --input tfplan.json "data.main" --format=pretty > opa-result.json
+        opa eval -b ${{ github.workspace }}/policies/ --input tfplan.json "data.main" --format=pretty > opa-result.json
     - name: edit dir name for artifact
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
