@@ -37,6 +37,7 @@ jobs:
       working-directory: ${{ inputs.dir }}
       run: |
         opa eval -b ${{ github.workspace }}/policies/ --input tfplan.json "data.main" --format=pretty > opa-result.json
+        echo "running"
     - name: edit dir name for artifact
       run: |
         new_name=$(echo ${{ inputs.dir }} | tr '/' ' ')
