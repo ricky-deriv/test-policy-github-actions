@@ -43,6 +43,7 @@ jobs:
     secrets: inherit
   
   display-output:
+    if: always()
     needs: [ initialize, opa-eval ]
     runs-on: ubuntu-latest
     strategy:
